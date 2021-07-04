@@ -69,20 +69,11 @@ abstract class WordRoomDatabase extends RoomDatabase {
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
 
-            // If you want to keep data through app restarts,
-            // comment out the following block
             databaseWriteExecutor.execute(() -> {
-                // Populate the database in the background.
-                // If you want to start with more words, just add them.
-                WordDao dao = INSTANCE.wordDao();
-                /*dao.deleteAll();
 
-                Word word = new Word();
-                word.setWord("Hello");
-                dao.insert(word);
-                word = new Word();
-                word.setWord("World");
-                dao.insert(word);*/
+
+                WordDao dao = INSTANCE.wordDao();
+
             });
         }
     };

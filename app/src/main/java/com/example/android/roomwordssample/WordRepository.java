@@ -64,7 +64,7 @@ class WordRepository {
         }.execute();
     }
     public void deleteWord(Word myWord)  {
-        new insertAsyncTask.deleteWordAsyncTask(mWordDao).execute(myWord);
+        new deleteWordAsyncTask(mWordDao).execute(myWord);
     }
 
 
@@ -82,7 +82,7 @@ class WordRepository {
             mAsyncTaskDao.insert(params[0]);
             return null;
         }
-
+    }
         private static class deleteWordAsyncTask extends AsyncTask<Word, Void, Void> {
             private WordDao mAsyncTaskDao;
 
@@ -96,7 +96,7 @@ class WordRepository {
                 return null;
             }
         }
-    }
+
 
 
 }
