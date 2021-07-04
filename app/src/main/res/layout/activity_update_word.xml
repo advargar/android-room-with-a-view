@@ -19,28 +19,41 @@
         android:layout_marginBottom="@dimen/big_padding"
         android:layout_marginTop="@dimen/big_padding"
         android:textSize="18sp" />
-
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:src="@drawable/images" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Subir una foto"
-        android:id="@+id/btnPhoto"
+        android:id="@+id/btnUpImage"
         android:layout_gravity="center"
         android:layout_margin="55dp"/>
 
-    <Button
-        android:id="@+id/button_update"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:text="@string/button_update"
-        android:textColor="@color/buttonLabel" />
+        android:gravity="center"
+        android:orientation="horizontal"
+        >
 
-    <Button
-        android:id="@+id/button_cancel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="30dp"
-        android:onClick="btnCancel"
-        android:text="@string/button_cancel" />
+        <Button
+            android:id="@+id/button_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:onClick="btnCancel"
+            android:text="@string/button_cancel" />
+        <Button
+            android:id="@+id/button_update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:background="@color/colorPrimary"
+            android:text="@string/button_update"
+            android:textColor="@color/buttonLabel" />
+</LinearLayout>
+
 </LinearLayout>

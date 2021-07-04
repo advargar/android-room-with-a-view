@@ -34,7 +34,15 @@ import java.util.List;
 
 public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordViewHolder> {
 
+    private ItemClicked itemClicked;
     private Context context;
+
+    WordListAdapter(ItemClicked itemClicked) {
+        this.itemClicked = itemClicked;
+    }
+    public Word getWordAtPosition (int position) {
+        return mWords.get(position);
+    }
 
     class WordViewHolder extends RecyclerView.ViewHolder {
         private final TextView wordItemView;
@@ -47,17 +55,12 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         }
     }
 
-    private final LayoutInflater mInflater;
     private List<Word> mWords = Collections.emptyList(); // Cached copy of words
-
-    WordListAdapter(Context context) {
-        mInflater = LayoutInflater.from(context);
-    }
 
     @Override
     public WordViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = mInflater.inflate(R.layout.recyclerview_item, parent, false);
-        return new WordViewHolder(itemView);
+        context = parent.getContext();
+        return new WordListAdapter.WordViewHolder(LayoutInflater.from(context).inflate(R.layout.recyclerview_item,null));
     }
 
     @Override
@@ -69,12 +72,14 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         holder.wordItemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, UpdateWord.class);
-                intent.putExtra("Word",String.valueOf(position));
-                context.startActivity(intent);
+                showPopup(v,current);
             }
         });
     }
+    public void showPopup(View view, final Word word){
+     itemClicked.updateWord(word);
+    }
+
 
     void setWords(List<Word> words) {
         mWords = words;
@@ -85,7 +90,9 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
     public int getItemCount() {
         return mWords.size();
     }
-
+    public interface ItemClicked{
+        void updateWord(Word word);
+    }
 }
 
 

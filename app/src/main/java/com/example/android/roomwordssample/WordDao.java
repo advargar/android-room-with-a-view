@@ -18,6 +18,7 @@ package com.example.android.roomwordssample;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
@@ -54,4 +55,7 @@ public interface WordDao {
 
     @Query("DELETE FROM word_table")
     void deleteAll();
+
+    @Delete
+    void deleteWord(Word word);
 }

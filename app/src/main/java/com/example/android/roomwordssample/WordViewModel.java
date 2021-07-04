@@ -29,7 +29,7 @@ import java.util.List;
 
 public class WordViewModel extends AndroidViewModel {
 
-    private WordRepository mRepository;
+    private static WordRepository mRepository;
     // Using LiveData and caching what getAlphabetizedWords returns has several benefits:
     // - We can put an observer on the data (instead of polling for changes) and only update the
     //   the UI when the data actually changes.
@@ -50,7 +50,11 @@ public class WordViewModel extends AndroidViewModel {
         mRepository.insert(word);
     }
 
-    void update(Word word){
+    public static void update(Word word){
         mRepository.update(word);
+    }
+
+    public void deleteWord(Word myWord) {
+        mRepository.deleteWord(myWord);
     }
 }
