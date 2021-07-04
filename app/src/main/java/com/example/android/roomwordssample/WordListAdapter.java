@@ -17,10 +17,15 @@ package com.example.android.roomwordssample;
  */
 
 import android.content.Context;
+
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Collections;
@@ -29,12 +34,16 @@ import java.util.List;
 
 public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordViewHolder> {
 
+    private Context context;
+
     class WordViewHolder extends RecyclerView.ViewHolder {
         private final TextView wordItemView;
+        public LinearLayout mainLayout;
 
         private WordViewHolder(View itemView) {
             super(itemView);
             wordItemView = itemView.findViewById(R.id.textView);
+            mainLayout = itemView.findViewById(R.id.recyclerview);
         }
     }
 
@@ -52,10 +61,19 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
     }
 
     @Override
-    public void onBindViewHolder(WordViewHolder holder, int position) {
-        Word current = mWords.get(position);
-        holder.wordItemView.setText(current.getWord());
+    public void onBindViewHolder(WordViewHolder holder, final int position) {
 
+        Word current = mWords.get(position);
+
+        holder.wordItemView.setText(current.getWord());
+        holder.wordItemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, UpdateWord.class);
+                intent.putExtra("Word",String.valueOf(position));
+                context.startActivity(intent);
+            }
+        });
     }
 
     void setWords(List<Word> words) {
@@ -67,6 +85,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
     public int getItemCount() {
         return mWords.size();
     }
+
 }
 
 
