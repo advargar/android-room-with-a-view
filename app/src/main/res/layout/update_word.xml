@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    tools:context=".UpdateWord">
+    android:layout_height="match_parent">
     <EditText
         android:id="@+id/edit_word"
         android:layout_width="match_parent"
@@ -23,7 +21,7 @@
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:src="@drawable/images" />
+        tools:src="@drawable/images"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -54,6 +52,5 @@
             android:background="@color/colorPrimary"
             android:text="@string/button_update"
             android:textColor="@color/buttonLabel" />
-</LinearLayout>
-
+    </LinearLayout>
 </LinearLayout>

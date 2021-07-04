@@ -20,6 +20,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -41,7 +42,7 @@ public interface WordDao {
     // Always holds/caches latest version of data. Notifies its active observers when the
     // data has changed. Since we are getting all the contents of the database,
     // we are notified whenever any of the database contents have changed.
-    @Query("SELECT * from word_table ORDER BY word ASC")
+    @Query("SELECT * from word_table1 ORDER BY word ASC")
     LiveData<List<Word>> getAlphabetizedWords();
 
     // We do not need a conflict strategy, because the word is our primary key, and you cannot
@@ -53,9 +54,7 @@ public interface WordDao {
     @Update
     void update(Word word);
 
-    @Query("DELETE FROM word_table")
-    void deleteAll();
-
     @Delete
     void deleteWord(Word word);
+
 }

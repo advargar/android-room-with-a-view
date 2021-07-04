@@ -18,17 +18,11 @@ limitations under the License. -->
     <string name="hint_word">Word…</string>
     <string name="button_save">Guardar</string>
     <string name="button_update">Actualizar</string>
+    <string name="button_delete">Eliminar</string>
     <string name="button_cancel">Cancelar</string>
     <string name="empty_not_saved">Word not saved because it is empty.</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_update_word">UpdateWord</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="saved">Word saved.</string>
+    <string name="updated">Word updated.</string>
+    <string name="delete_all_menu">Delete all words</string>
+    <string name="add_word">Add word</string>
 </resources>

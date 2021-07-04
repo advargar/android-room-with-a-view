@@ -17,8 +17,9 @@ package com.example.android.roomwordssample;
  */
 
 import android.app.Application;
-import androidx.lifecycle.LiveData;
 import android.os.AsyncTask;
+
+import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
@@ -48,14 +49,12 @@ class WordRepository {
         return mAllWords;
     }
 
-    // You must call this on a non-UI thread or your app will crash.
-    // Like this, Room ensures that you're not doing any long running operations on the main
-    // thread, blocking the UI.
+    // You must call this on a non-UI thread or your app will throw an exception. Room ensures
+    // that you're not doing any long running operations on the main thread, blocking the UI.
     void insert(Word word) {
         new insertAsyncTask(mWordDao).execute(word);
     }
-
-    public void update(final Word word) {
+    public void update(final Word word){
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
@@ -64,10 +63,11 @@ class WordRepository {
             }
         }.execute();
     }
-
-    public void deleteWord(Word myWord) {
-        new deleteWordAsyncTask(mWordDao).execute(myWord);
+    public void deleteWord(Word myWord)  {
+        new insertAsyncTask.deleteWordAsyncTask(mWordDao).execute(myWord);
     }
+
+
 
     private static class insertAsyncTask extends AsyncTask<Word, Void, Void> {
 
@@ -82,20 +82,21 @@ class WordRepository {
             mAsyncTaskDao.insert(params[0]);
             return null;
         }
+
+        private static class deleteWordAsyncTask extends AsyncTask<Word, Void, Void> {
+            private WordDao mAsyncTaskDao;
+
+            deleteWordAsyncTask(WordDao dao) {
+                mAsyncTaskDao = dao;
+            }
+
+            @Override
+            protected Void doInBackground(final Word... params) {
+                mAsyncTaskDao.insert(params[0]);
+                return null;
+            }
+        }
     }
 
-    private static class deleteWordAsyncTask extends AsyncTask<Word, Void, Void> {
-        private WordDao mAsyncTaskDao;
-
-        deleteWordAsyncTask(WordDao dao) {
-            mAsyncTaskDao = dao;
-        }
-
-        @Override
-        protected Void doInBackground(final Word... params) {
-            mAsyncTaskDao.deleteWord(params[0]);
-            return null;
-        }
-    }
 
 }

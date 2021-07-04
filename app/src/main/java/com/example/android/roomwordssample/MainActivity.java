@@ -16,40 +16,32 @@ package com.example.android.roomwordssample;
  * limitations under the License.
  */
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
-
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.io.BufferedInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.List;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 public class MainActivity extends AppCompatActivity implements WordListAdapter.ItemClicked {
 
     public static final int NEW_WORD_ACTIVITY_REQUEST_CODE = 1;
-    private static final int SELECT_PICTURE = 1;
-
     private WordViewModel mWordViewModel;
 
     @Override
@@ -57,16 +49,13 @@ public class MainActivity extends AppCompatActivity implements WordListAdapter.I
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
         final WordListAdapter adapter = new WordListAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Get a new or existing ViewModel from the ViewModelProvider.
-        mWordViewModel = ViewModelProviders.of(this).get(WordViewModel.class);
+        mWordViewModel = new ViewModelProvider(this).get(WordViewModel.class);
 
         // Add an observer on the LiveData returned by getAlphabetizedWords.
         // The onChanged() method fires when the observed data changes and the activity is
@@ -87,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements WordListAdapter.I
                 startActivityForResult(intent, NEW_WORD_ACTIVITY_REQUEST_CODE);
             }
         });
-
         ItemTouchHelper helper = new ItemTouchHelper(
                 new ItemTouchHelper.SimpleCallback(0,
                         ItemTouchHelper.RIGHT) {
@@ -115,55 +103,54 @@ public class MainActivity extends AppCompatActivity implements WordListAdapter.I
         if (requestCode == NEW_WORD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             Word word = new Word(data.getStringExtra(NewWordActivity.EXTRA_REPLY));
             mWordViewModel.insert(word);
+            Toast.makeText(getApplicationContext(), R.string.saved, Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(
-                    getApplicationContext(),
-                    R.string.empty_not_saved,
-                    Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.empty_not_saved, Toast.LENGTH_LONG).show();
         }
     }
 
-    public void updateWord(Word word) {
+    @Override
+    public void wordUpdate(Word word) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        final View view1 = getLayoutInflater().inflate(R.layout.activity_update_word, null);
+        final View view1 = getLayoutInflater().inflate(R.layout.update_word, null);
         final EditText editWord = view1.findViewById(R.id.edit_word);
 
         editWord.setText(word.getWord());
-        Button update_button = view1.findViewById(R.id.button_update);
-        update_button.setText("Update");
-        update_button.setOnClickListener(new View.OnClickListener() {
+        Button UpdateWord = view1.findViewById(R.id.button_update);
+        UpdateWord.setText("Update");
+        UpdateWord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //SET
                 word.setWord(editWord.getText().toString());
                 mWordViewModel.update(word);
-               Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivityForResult(intent, 1);
+                Toast.makeText( getApplicationContext(),  R.string.button_update, Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivityForResult(intent, NEW_WORD_ACTIVITY_REQUEST_CODE);
             }
-
         });
 
         builder.setView(view1);
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
+
     public void btnCancel(View view) {
         finish();
     }
-    public void deleteWord(Word word) {
-        Toast.makeText(MainActivity.this, "Deleting " +
-                word.getWord(), Toast.LENGTH_LONG).show();
-        //Delete the word
-        mWordViewModel.deleteWord(word);
+
+    public void wordDelete(Word word) {
+        final View view1 = getLayoutInflater().inflate(R.layout.recyclerview_item, null);
+
+        Button DeleteWord = view1.findViewById(R.id.button_delete);
+
+        DeleteWord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mWordViewModel.deleteWord(word);
+                Toast.makeText(getApplicationContext(), R.string.delete_all_menu, Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivityForResult(intent, NEW_WORD_ACTIVITY_REQUEST_CODE);
+            }
+        });
     }
-
-    public void upImage(View view) {
-        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-        int code = SELECT_PICTURE;
-        if(intent.resolveActivity(getPackageManager())!=null){
-            startActivityForResult(intent,SELECT_PICTURE);
-        }
-    }
-
-
 }

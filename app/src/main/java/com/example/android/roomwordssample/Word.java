@@ -32,23 +32,39 @@ import androidx.annotation.NonNull;
  * https://developer.android.com/topic/libraries/architecture/room.html
  */
 
-@Entity(tableName = "word_table")
+@Entity(tableName = "word_table1")
 public class Word {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     @NonNull
     @ColumnInfo(name = "word")
-    private String mWord;
+    private String word;
 
-    public Word(@NonNull String word) {
-        this.mWord = word;
+
+    public Word(String stringExtra) {
+    }
+
+    public Word() {
+
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setWord(String word) {
+        this.word = word;
     }
 
     @NonNull
     public String getWord() {
-        return this.mWord;
+        return this.word;
     }
 
-    public void setWord(String mWord) {
-    }
+
 }

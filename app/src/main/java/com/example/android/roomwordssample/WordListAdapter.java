@@ -16,88 +16,85 @@ package com.example.android.roomwordssample;
  * limitations under the License.
  */
 
+import android.app.Activity;
 import android.content.Context;
-
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Collections;
 import java.util.List;
 
 
 public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordViewHolder> {
+    private Context mContext;
+    class WordViewHolder extends RecyclerView.ViewHolder {
+        private final TextView wordItemView;
+        private int nPosition;
+        private ImageView img;
 
+        private WordViewHolder(View itemView) {
+            super(itemView);
+            wordItemView = itemView.findViewById(R.id.textView);
+            img  = itemView.findViewById(R.id.btnUpImage);
+        }
+        public void setData(String note, int position) {
+            wordItemView.setText(note);
+            nPosition = position;
+
+        }
+
+        public void setListeners(final Word word) {
+            wordItemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showPopup(v,word);
+                }
+            });
+
+        }
+    }
+
+    private List<Word> mWords; // Cached copy of words
     private ItemClicked itemClicked;
     private Context context;
 
     WordListAdapter(ItemClicked itemClicked) {
         this.itemClicked = itemClicked;
+        mContext = context;
     }
-    public Word getWordAtPosition (int position) {
-        return mWords.get(position);
-    }
-
-    class WordViewHolder extends RecyclerView.ViewHolder {
-        private final TextView wordItemView;
-        public LinearLayout mainLayout;
-
-        private WordViewHolder(View itemView) {
-            super(itemView);
-            wordItemView = itemView.findViewById(R.id.textView);
-            mainLayout = itemView.findViewById(R.id.recyclerview);
-        }
-    }
-
-    private List<Word> mWords = Collections.emptyList(); // Cached copy of words
-
     @Override
     public WordViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
         return new WordListAdapter.WordViewHolder(LayoutInflater.from(context).inflate(R.layout.recyclerview_item,null));
     }
-
     @Override
-    public void onBindViewHolder(WordViewHolder holder, final int position) {
-        if (mWords != null) {
-        Word current = mWords.get(position);
+    public void onBindViewHolder(WordViewHolder holder, int position) {
 
-        holder.wordItemView.setText(current.getWord());
-        holder.wordItemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPopup(v,current);
-            }
-        });
-        holder.wordItemView.setOnLongClickListener(new View.OnLongClickListener() {
+            Word current = mWords.get(position);
+             holder.setData(current.getWord(),position);
+             holder.setListeners(current);
 
-            @Override
-            public boolean onLongClick(View v) {
-                itemClicked.updateWord(current);
-                return true;
-            }
-        });
-        } else {
-            // Covers the case of data not being ready yet.
-            holder.wordItemView.setText("No Word");
-        }
     }
     public void showPopup(View view, final Word word){
-     itemClicked.updateWord(word);
+        itemClicked.wordUpdate(word);
     }
-
-
     void setWords(List<Word> words) {
         mWords = words;
         notifyDataSetChanged();
     }
-
+    public Word getWordAtPosition (int position) {
+        return mWords.get(position);
+    }
+    // getItemCount() is called many times, and when it is first called,
+    // mWords has not been updated (means initially, it's null, and we can't return null).
     @Override
     public int getItemCount() {
         if (mWords != null)
@@ -105,8 +102,8 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
         else return 0;
     }
     public interface ItemClicked{
-        void updateWord(Word word);
-        void deleteWord(Word word);
+        void wordUpdate(Word word);
+        void wordDelete(Word word);
     }
 }
 
