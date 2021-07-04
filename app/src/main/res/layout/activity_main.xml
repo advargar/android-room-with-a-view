@@ -41,6 +41,13 @@ So, we are leaving the template code in. -->
     </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/content_main"/>
+    <Button
+        android:id="@+id/button_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="600dp"
+        android:onClick="btnDelete"
+        android:text="Eliminar Todo" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

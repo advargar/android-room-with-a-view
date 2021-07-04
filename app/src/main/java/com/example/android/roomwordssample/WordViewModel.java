@@ -50,7 +50,7 @@ public class WordViewModel extends AndroidViewModel {
         mRepository.insert(word);
     }
 
-    public static void update(Word word){
+    public void update(Word word){
         mRepository.update(word);
     }
 

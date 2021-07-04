@@ -31,6 +31,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
+
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -127,14 +129,14 @@ public class MainActivity extends AppCompatActivity implements WordListAdapter.I
         final EditText editWord = view1.findViewById(R.id.edit_word);
 
         editWord.setText(word.getWord());
-        ImageView image= findViewById(R.id.imageView);
         Button update_button = view1.findViewById(R.id.button_update);
+        update_button.setText("Update");
         update_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //SET
                 word.setWord(editWord.getText().toString());
-                WordViewModel.update(word);
+                mWordViewModel.update(word);
                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivityForResult(intent, 1);
             }
@@ -148,6 +150,13 @@ public class MainActivity extends AppCompatActivity implements WordListAdapter.I
     public void btnCancel(View view) {
         finish();
     }
+    public void deleteWord(Word word) {
+        Toast.makeText(MainActivity.this, "Deleting " +
+                word.getWord(), Toast.LENGTH_LONG).show();
+        //Delete the word
+        mWordViewModel.deleteWord(word);
+    }
+
     public void upImage(View view) {
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         int code = SELECT_PICTURE;

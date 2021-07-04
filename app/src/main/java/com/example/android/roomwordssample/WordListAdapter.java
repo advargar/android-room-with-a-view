@@ -65,7 +65,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
 
     @Override
     public void onBindViewHolder(WordViewHolder holder, final int position) {
-
+        if (mWords != null) {
         Word current = mWords.get(position);
 
         holder.wordItemView.setText(current.getWord());
@@ -75,6 +75,18 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
                 showPopup(v,current);
             }
         });
+        holder.wordItemView.setOnLongClickListener(new View.OnLongClickListener() {
+
+            @Override
+            public boolean onLongClick(View v) {
+                itemClicked.updateWord(current);
+                return true;
+            }
+        });
+        } else {
+            // Covers the case of data not being ready yet.
+            holder.wordItemView.setText("No Word");
+        }
     }
     public void showPopup(View view, final Word word){
      itemClicked.updateWord(word);
@@ -88,10 +100,13 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
 
     @Override
     public int getItemCount() {
-        return mWords.size();
+        if (mWords != null)
+            return mWords.size();
+        else return 0;
     }
     public interface ItemClicked{
         void updateWord(Word word);
+        void deleteWord(Word word);
     }
 }
 
